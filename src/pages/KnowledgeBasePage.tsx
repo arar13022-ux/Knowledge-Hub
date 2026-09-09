@@ -45,7 +45,7 @@ export default function KnowledgeBasePage() {
           >
             <h3 className="font-medium">{article.title}</h3>
             <p className="text-sm text-ink-700/60 dark:text-paper-100/50 mt-1 line-clamp-2">{article.summary}</p>
-            {article.reviewDueAt && new Date(article.reviewDueAt) < new Date() && (
+            {article.review_Due_At && new Date(article.review_Due_At) < new Date() && (
               <span className="inline-block mt-2 text-xs text-signal-amber">Due for review</span>
             )}
           </Link>
