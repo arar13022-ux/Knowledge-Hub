@@ -45,9 +45,9 @@ function QueueItem({ question }: { question: Question }) {
 
   return (
     <div className="rounded-xl border border-black/5 dark:border-white/10 bg-white dark:bg-ink-900 p-4">
-      <p className="text-sm font-medium">{question.rawText}</p>
+      <p className="text-sm font-medium">{question.raw_Text}</p>
       <p className="text-xs text-ink-700/50 dark:text-paper-100/40 mt-1">
-        Asked {new Date(question.createdAt).toLocaleString()}
+        Asked {new Date(question.created_At).toLocaleString()}
       </p>
       <textarea
         value={draft}
