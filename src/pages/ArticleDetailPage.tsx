@@ -32,7 +32,7 @@ export default function ArticleDetailPage() {
     <article className="max-w-2xl">
       <h1 className="font-display text-2xl font-bold">{article.title}</h1>
       <p className="text-sm text-ink-700/50 dark:text-paper-100/40 mt-1">
-        Last reviewed {article.updated_at. ? new Date(article.updated_at.).toLocaleDateString() : '—'}
+        Last reviewed {article.updated_at ? new Date(article.updated_at).toLocaleDateString() : '—'}
       </p>
       <div className="prose prose-sm dark:prose-invert max-w-none mt-6 whitespace-pre-wrap">{article.body}</div>
 
