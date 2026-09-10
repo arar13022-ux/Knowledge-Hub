@@ -20,9 +20,9 @@ export interface Article {
   accessGroupId: string | null;
   status: ArticleStatus;
   ownerId: string;
-  reviewDueAt: string | null;
+  review_due_at: string | null;
   keywords: string[];
-  updatedAt: string;
+  updated_at: string;
   helpfulCount: number;
   notHelpfulCount: number;
 }
