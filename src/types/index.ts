@@ -34,7 +34,7 @@ export interface ArticleVersion {
   title: string;
   body: string;
   editedBy: string;
-  createdAt: string;
+  created_at: string;
 }
 
 export type QuestionStatus = 'auto_answered' | 'queued' | 'answered' | 'duplicate';
@@ -42,10 +42,10 @@ export type QuestionStatus = 'auto_answered' | 'queued' | 'answered' | 'duplicat
 export interface Question {
   id: string;
   askedBy: string;
-  rawText: string;
+  raw_text: string;
   categoryId: string | null;
   status: QuestionStatus;
-  createdAt: string;
+  created_at: string;
   duplicateOf?: string;
 }
 
@@ -59,7 +59,7 @@ export interface Answer {
   authoredBy: string;
   approvedBy: string | null;
   status: AnswerStatus;
-  createdAt: string;
+  created_at: string;
 }
 
 export type FeedbackType = 'helpful' | 'not_helpful' | 'outdated';
@@ -75,5 +75,5 @@ export interface Notification {
   type: 'answered' | 'article_updated' | 'queue_assigned' | 'review_due';
   message: string;
   read: boolean;
-  createdAt: string;
+  created_at: string;
 }
