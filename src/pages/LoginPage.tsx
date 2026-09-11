@@ -104,7 +104,7 @@ export default function LoginPage() {
             {mode === 'signin' ? "Don't have an account? Create one" : 'Already have an account? Sign in'}
           </button>
         </form>
-        <Route path="/login" element={<LoginPage />} />
+        <p className="mt-6 text-center text-xs text-ink-700/40 dark:text-paper-100/30"> Clarity, shared. · Built by Abdullah Hany </p>
       </div>
     </div>
   );
