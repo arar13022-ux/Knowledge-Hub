@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../lib/supabaseClient';
 
 async function fetchUsers() {
@@ -8,7 +8,16 @@ async function fetchUsers() {
 }
 
 export default function AdminSettingsPage() {
+  const queryClient = useQueryClient();
   const { data: users } = useQuery({ queryKey: ['admin-users'], queryFn: fetchUsers });
+
+  const updateRole = useMutation({
+    mutationFn: async ({ id, role }: { id: string; role: string }) => {
+      const { error } = await supabase.from('profiles').update({ role }).eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-users'] }),
+  });
 
   return (
     <div>
@@ -28,7 +37,17 @@ export default function AdminSettingsPage() {
               <tr key={u.id} className="border-t border-black/5 dark:border-white/10">
                 <td className="py-2">{u.full_name}</td>
                 <td className="py-2 text-ink-700/60 dark:text-paper-100/50">{u.team ?? '—'}</td>
-                <td className="py-2 capitalize">{u.role.replace('_', ' ')}</td>
+                <td className="py-2">
+                  <select
+                    value={u.role}
+                    onChange={(e) => updateRole.mutate({ id: u.id, role: e.target.value })}
+                    className="rounded-lg border border-black/10 dark:border-white/10 bg-transparent px-2 py-1 text-sm capitalize"
+                  >
+                    <option value="agent">Agent</option>
+                    <option value="team_lead">Team lead</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
               </tr>
             ))}
           </tbody>
