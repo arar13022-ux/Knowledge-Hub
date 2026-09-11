@@ -66,6 +66,7 @@ export default function Layout() {
       </header>
       <main className="max-w-6xl mx-auto px-6 py-8">
         <Outlet />
+        <footer className="max-w-6xl mx-auto px-6 py-6 text-center text-xs text-ink-700/40 dark:text-paper-100/30"> Clarity, shared. · Built by Abdullah Hany </footer>
       </main>
     </div>
   );
