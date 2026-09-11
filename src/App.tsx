@@ -8,7 +8,7 @@ import ArticleDetailPage from './pages/ArticleDetailPage';
 import AskQuestionPage from './pages/AskQuestionPage';
 import QueuePage from './pages/QueuePage';
 import AnalyticsPage from './pages/AnalyticsPage';
-import AdminSettingsPage from './pages/AdminSettingsPage';
+import AdminSettingsPage from './pages/AdminSettingsPage'; import FeedbackPage from './pages/FeedbackPage';
 import type { UserRole } from './types';
 
 function ProtectedRoute({ children, allow }: { children: JSX.Element; allow?: UserRole[] }) {
