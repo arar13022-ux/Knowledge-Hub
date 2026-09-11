@@ -1,12 +1,16 @@
 import { FormEvent, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabaseClient';
 
 export default function LoginPage() {
   const { signIn, profile } = useAuth();
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   if (profile) return <Navigate to="/" replace />;
@@ -14,11 +18,23 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
+    setInfo(null);
     setSubmitting(true);
     try {
-      await signIn(email, password);
+      if (mode === 'signin') {
+        await signIn(email, password);
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { full_name: fullName } },
+        });
+        if (error) throw error;
+        setInfo('Account created. Check your email to confirm, then sign in — an admin will assign your role.');
+        setMode('signin');
+      }
     } catch (err: any) {
-      setError(err.message ?? 'Could not sign in. Check your email and password.');
+      setError(err.message ?? 'Could not complete request. Check your details.');
     } finally {
       setSubmitting(false);
     }
@@ -32,10 +48,23 @@ export default function LoginPage() {
             Knowledge<span className="text-signal-teal">Hub</span>
           </span>
           <p className="mt-2 text-sm text-ink-700/60 dark:text-paper-100/50">
-            Sign in with your company account.
+            {mode === 'signin' ? 'Sign in with your company account.' : 'Create an account to get started.'}
           </p>
         </div>
         <form onSubmit={handleSubmit} className="bg-white dark:bg-ink-900 rounded-2xl p-6 shadow-sm space-y-4">
+          {mode === 'signup' && (
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="fullName">Full name</label>
+              <input
+                id="fullName"
+                type="text"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full rounded-lg border border-black/10 dark:border-white/10 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-signal-teal"
+              />
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="email">Work email</label>
             <input
@@ -59,12 +88,20 @@ export default function LoginPage() {
             />
           </div>
           {error && <p className="text-sm text-signal-coral">{error}</p>}
+          {info && <p className="text-sm text-signal-teal">{info}</p>}
           <button
             type="submit"
             disabled={submitting}
             className="w-full rounded-lg bg-signal-teal text-white py-2 text-sm font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
           >
-            {submitting ? 'Signing in…' : 'Sign in'}
+            {submitting ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Create account'}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(null); setInfo(null); }}
+            className="w-full text-center text-sm text-ink-700/60 dark:text-paper-100/50 hover:underline"
+          >
+            {mode === 'signin' ? "Don't have an account? Create one" : 'Already have an account? Sign in'}
           </button>
         </form>
       </div>
