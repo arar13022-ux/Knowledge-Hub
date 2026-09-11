@@ -41,6 +41,7 @@ export default function Layout() {
                   Admin
                 </NavLink>
               )}
+              {hasRole('team_lead', 'admin') && ( <NavLink to="/feedback" className={({ isActive }) => clsx(navItem, isActive && navItemActive)}> Feedback </NavLink> )}
             </nav>
           </div>
           <div className="flex items-center gap-3">
