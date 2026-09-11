@@ -34,13 +34,26 @@ function QueueItem({ question }: { question: Question }) {
 
   const publish = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase
+      const { error: qError } = await supabase
         .from('questions')
         .update({ status: 'answered' })
         .eq('id', question.id);
-      if (error) throw error;
+      if (qError) throw qError;
+
+      const { error: aError } = await supabase.from('articles').insert({
+        title: question.raw_text,
+        body: draft,
+        status: 'published',
+        category_id: (question as any).category_id ?? null,
+        owner_id: profile?.id,
+        approved_by: profile?.id,
+      });
+      if (aError) throw aError;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['queue'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['queue'] });
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
+    },
   });
 
   return (
@@ -67,7 +80,8 @@ function QueueItem({ question }: { question: Question }) {
         {hasRole('admin') && (
           <button
             onClick={() => publish.mutate()}
-            className="rounded-lg border border-black/10 dark:border-white/10 px-3 py-1.5 text-sm"
+            disabled={!draft.trim()}
+            className="rounded-lg border border-black/10 dark:border-white/10 px-3 py-1.5 text-sm disabled:opacity-40"
           >
             Publish to agent
           </button>
