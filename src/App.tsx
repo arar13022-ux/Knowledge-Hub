@@ -57,6 +57,7 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        </Route> for '/admin' (around line 59, just before </Routes> on line 60), add: <Route path="/feedback" element={ <ProtectedRoute allow={['team_lead', 'admin']}> <FeedbackPage /> </ProtectedRoute> } />
       </Route>
     </Routes>
   );
