@@ -10,7 +10,6 @@ import QueuePage from './pages/QueuePage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import AdminSettingsPage from './pages/AdminSettingsPage'; import FeedbackPage from './pages/FeedbackPage';
 import type { UserRole } from './types';
-
 function ProtectedRoute({ children, allow }: { children: JSX.Element; allow?: UserRole[] }) {
   const { profile, loading } = useAuth();
   if (loading) return null;
@@ -57,7 +56,14 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
-        </Route> for '/admin' (around line 59, just before </Routes> on line 60), add: <Route path="/feedback" element={ <ProtectedRoute allow={['team_lead', 'admin']}> <FeedbackPage /> </ProtectedRoute> } />
+        <Route
+          path="/feedback"
+          element={
+            <ProtectedRoute allow={['team_lead', 'admin']}>
+              <FeedbackPage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </Routes>
   );
