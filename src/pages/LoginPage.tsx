@@ -104,6 +104,7 @@ export default function LoginPage() {
             {mode === 'signin' ? "Don't have an account? Create one" : 'Already have an account? Sign in'}
           </button>
         </form>
+        <Route path="/login" element={<LoginPage />} />
       </div>
     </div>
   );
